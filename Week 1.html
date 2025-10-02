@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+    <title>Pet Store</title>
+</head>
+<body>
+    <div id="webstore">
+       <!-- Simple Checkout button -->
+       <button @click="checkout" style="float:right; margin:10px;"><i class="fas fa-shopping-cart"></i> Checkout ({{ cart.length }})</button>
+
+       <h1>{{ message }}</h1>
+       
+       <main>
+        <figure>
+          <img v-bind:src="product.image" alt="Product image">
+          <h2 v-text="product.title"></h2>
+          <p>ID: {{ product.id }}</p>
+          <p v-text="product.description"></p>
+          <p>Price: ${{ product.price }}</p>
+          <p>Available: {{ product.quantity }}</p>
+          <button 
+            v-on:click="addToCart(product)" 
+            :disabled="product.quantity === 0">
+            Add to Cart
+          </button>
+          <p v-if="product.quantity === 0" style="color:red;">Out of stock</p>
+        </figure>
+       </main>
+
+       <!-- Cart Section -->
+       <section>
+          <h2>Cart</h2>
+          <p>Items in cart: {{ cart.length }}</p>
+          <ul>
+            <li v-for="(item, index) in cart" :key="index">
+              {{ item.title }} - ${{ item.price }}
+            </li>
+          </ul>
+       </section>
+
+    </div>
+
+<script>
+let webstore = new Vue({
+  el: '#webstore',
+  data: {
+    message: 'Welcome to my Pet Store !!!!',
+    product: {
+      id: 1001,
+      title: 'Cat Food 25 lb bag',
+      description: 'Irresistible cat food for your cat',
+      price: 20,
+      image: 'catimage.png', 
+      quantity: 5
+    },
+    cart: []
+  },
+  methods: {
+    addToCart(product) {
+      if (product.quantity > 0) {
+        this.cart.push(product);
+        product.quantity--;
+      }
+    },
+    checkout() {
+      alert('Checked out ' + this.cart.length + ' item(s). Thank you!');
+      this.cart = []; 
+    }
+  }
+});
+</script> 
+</body>
+</html>
